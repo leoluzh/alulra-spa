@@ -2,14 +2,15 @@ import { detalhaCliente , editaCliente } from '../../api/cliente'
 import { validaCPF } from '../validacao/validaCPF'
 
 
+
 const eventoForm = form => {
 
     const pegaURL = new URL(window.location)
 
     const id = pegaURL.searchParams.get('id')
     
-    const inputCPF = document.querySelector('[data-cpf]')
-    const inputNome = document.querySelector('[data-nome]')
+    const inputCPF = form.querySelector('[data-cpf]')
+    const inputNome = form.querySelector('[data-nome]')
     
     detalhaCliente(id).then( dados => {
         inputCPF.value = dados[0].cpf 
@@ -32,27 +33,25 @@ const eventoForm = form => {
         event.preventDefault()
     
         if(!validaCPF(inputCPF.value)){
-            alert("ESSE NÃO EXISTE")
+            alert("Esse CPF não exite.")
             return 
         }
     
         editaCliente(id, inputCPF.value, inputNome.value)
-        .then( resposta => { 
-            if( resposta.status === 200){
-                form.appendChild(alerta(
-                    "alert alert-success",
-                    "CLIENTE EDITADO COM SUCESSO !"
-                ))
-            } else { 
-                form.appendChild(alerta(
-                    "alert alert-warning",
-                    "O CLIENTE NÃO PODE SER EDITADO !"
-                ))
-            }
-        })
+        .then( () =>  
+            form.appendChild(alerta(
+                "alert alert-success",
+                "CLIENTE EDITADO COM SUCESSO !"
+            )))
+        .catch( () => 
+            form.appendChild(alerta(
+                "alert alert-warning",
+                "O CLIENTE NÃO PODE SER EDITADO !"
+            ))
+        )
         
-        
-    
     })
 
 }
+
+export default eventoForm;

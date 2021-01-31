@@ -2,6 +2,15 @@ import { deletaCliente, listarClientes} from '../../api/cliente.js'
 import "../../assets/css/clientes.css"
 import { navegacao } from '../../router'
 
+const criarBotaoExcluir = ( id ) => {
+  const botao = document.createElement("button")
+  botao.classList.add('btn','btn-danger')
+  botao.innerHTML = 'Excluir'
+  botao.addEventListener( 'click' , () => {
+    removeCliente( id )
+  })
+  return botao 
+}
 
 const criarCorpoTabela = ( tabela ) => {
 
@@ -13,12 +22,12 @@ const criarCorpoTabela = ( tabela ) => {
     const conteudoLinha = `
     <td>${cpf}</td>
     <td>${nome}</td>
-    <button type="button" class="btn btn-danger" onclick="removeCliente(${id})">Excluir</button>
     <a href="edita-clientes.html?id=${id}">
-    <button type=""button class="btn btn-info">Editar</button>
+      <button type="button" class="btn btn-info" onclick="navegacao('/edita?id=${id}'); return false;">Editar</button>
     </a>`
   
     linha.innerHTML = conteudoLinha;
+    linha.appendChild( criarBotaoExcluir( id ) )
     return linha;
   };
 
